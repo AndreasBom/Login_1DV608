@@ -5,8 +5,11 @@ class DateTimeView {
 
 	public function show() {
 
-		$timeString = 'TODO, Write servertime here...';
+		$dateNow = getdate();
 
-		return '<p>' . $timeString . '</p>';
+		$timeString = "{$dateNow['weekday']}, the {$dateNow['mday']}:th of {$dateNow['month']}
+						{$dateNow['year']}, The time is " . date('H:i:s');
+
+		return $timeString;
 	}
 }
