@@ -7,8 +7,7 @@ class DateTimeView {
 
 		$dateNow = getdate();
 
-		$timeString = "{$dateNow['weekday']}, the {$dateNow['mday']}:th of {$dateNow['month']}
-						{$dateNow['year']}, The time is " . date('H:i:s');
+		$timeString = "<p>{$dateNow['weekday']}, the {$dateNow['mday']}:th of {$dateNow['month']}{$dateNow['year']}, The time is " . date('H:i:s') . "</p>";
 
 		return $timeString;
 	}
