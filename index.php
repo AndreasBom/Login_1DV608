@@ -15,13 +15,13 @@ ini_set('display_errors', 'On');
 
 //CREATE OBJECTS OF THE VIEWS
 $loginM = new \model\LoginModel();
-$loginC = new \control\LoginController($loginM);
-
 $loginV = new LoginView($loginM);
 $dateTimeV = new DateTimeView();
 
+$loginC = new \control\LoginController($loginM, $loginV);
 $lv = new LayoutView();
 
-$loginC->doLogin();
-$lv->render(false, $loginV, $dateTimeV);
+$loggedIn = $loginC->doLogin();
+
+$lv->render($loggedIn, $loginV, $dateTimeV);
 

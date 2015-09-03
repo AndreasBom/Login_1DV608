@@ -22,6 +22,7 @@ class LoginView {
 	private $loginModel;
 	private $validate;
 	private $cookie;
+	private $loginMessage = "";
 
 	public function __construct(LoginModel $loginModel)
 	{
@@ -31,7 +32,6 @@ class LoginView {
 	}
 
 	public function didUserTryToLogin(){
-
 		return isset($_POST[self::$login]);
 	}
 
@@ -39,14 +39,32 @@ class LoginView {
 		if($this->didUserTryToLogin()){
 			return $_POST[self::$name];
 		}
+		return "";
 	}
 
 	public function getPassword(){
 		if($this->didUserTryToLogin()){
 			return $_POST[self::$password];
 		}
+		return "";
 
 	}
+
+	public function showLoginMessage($loggedIn)
+	{
+		if($loggedIn){
+			$this->loginMessage = "<p>Welcome</p>";
+		}else{
+			if($this->getUsername() == ""){
+				$this->loginMessage = "<p>Username is missing</p>";
+			}else if($this->getPassword() == ""){
+				$this->loginMessage = "<p>Password is missing</p>";
+			}else{
+				$this->loginMessage = "<p>Wrong username or password</p>";
+			}
+		}
+	}
+
 
 	/**
 	 * Create HTTP response
@@ -56,15 +74,11 @@ class LoginView {
 	 * @return  void BUT writes to standard output and cookies!
 	 */
 	public function response() {
-		$message = '';
-		if(isset($_COOKIE["message"])){
-			$message = $_COOKIE["message"];
+		$message = $this->loginMessage;
+
+		if($this->loginModel->isUserLoggedIn()){
+			return $this->generateLogoutButtonHTML($message);
 		}
-
-
-
-		//return $this->generateLogoutButtonHTML($message);
-
 		return  $this->generateLoginFormHTML($message);
 	}
 

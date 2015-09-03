@@ -19,8 +19,7 @@ class LoginModel
     private static $password = "Password";
 
     private $userIsLoggedIn = false;
-    private $usernameMissing = true;
-    private $passwordMissing = true;
+
 
 
 
@@ -30,37 +29,15 @@ class LoginModel
             $this->userIsLoggedIn = true;
             return true;
         }
-        $this->userCredidentialsIsMissing($userName, $password);
+
         return false;
     }
 
-    private function userCredidentialsIsMissing($username, $password)
+    public function isUserLoggedIn()
     {
-        if($username != ""){
-            $this->usernameMissing = false;
-        }
-        if($password != ""){
-            $this->passwordMissing = false;
-        }
+        return $this->userIsLoggedIn;
     }
 
-    public function generateResponseMessage(){
-        if($this->userIsLoggedIn){
-            var_dump("Welcome");
-            return "Welcome";
-        }
-        if($this->usernameMissing){
-            var_dump("missing user");
-            return "Username is missing";
-        }
-        if($this->passwordMissing){
-            var_dump("missing pass");
-            return "Password is missing";
-        }
-
-        var_dump("wrong u or p");
-        return "Wrong name or password";
-    }
 
 
 }

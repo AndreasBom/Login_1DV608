@@ -16,27 +16,27 @@ class LoginController
 {
     private $loginModel;
     private $loginView;
-    private $cookieStorage;
 
-    public function __construct(LoginModel $model)
+    public function __construct(LoginModel $model, LoginView $loginView)
     {
         $this->loginModel = $model;
-        $this->loginView = new LoginView($model);
-        $this->cookieMessage = new CookieStorage();
+        $this->loginView = $loginView;
     }
 
     public function doLogin()
     {
-
         if($this->loginView->didUserTryToLogin()) {
-
-            $this->loginModel->correctLoginCredidentials($this->loginView->getUsername(), $this->loginView->getPassword());
-
+            $loggedIn = $this->loginModel->correctLoginCredidentials($this->loginView->getUsername(), $this->loginView->getPassword());
+            $this->loginView->showLoginMessage($loggedIn);
+            $this->generateView();
+            return true;
         }
-        $message= $this->loginModel->generateResponseMessage();
-        $this->cookieMessage->save("message", $message);
 
+        $this->generateView();
+        return false;
+    }
 
-        return $this->loginView->response();
+    private function generateView(){
+        $this->loginView->response();
     }
 }
