@@ -30,6 +30,22 @@ class LoginView {
 		$this->cookie = new CookieStorage();
 	}
 
+	public function didUserTryToLogin(){
+		
+		return isset($_POST[self::$login]);
+	}
+
+	public function getUsername(){
+		if($this->didUserTryToLogin()){
+			return $_POST[self::$name];
+		}
+	}
+
+	public function getPassword(){
+		if($this->didUserTryToLogin()){
+			return $_POST[self::$password];
+		}
+	}
 
 	/**
 	 * Create HTTP response
@@ -42,38 +58,9 @@ class LoginView {
 		$message = '';
 
 
+		//return $this->generateLogoutButtonHTML($message);
 
-		//Checks if user has pressed the loginButton and a POST is preformed
-		if(isset($_POST[self::$login])) {
-
-			//Correct username and password
-			if ($this->loginModel->correctLoginCredidentials($_POST[self::$name], $_POST[self::$password])) {
-				$message = "Welcome";
-				$this->cookie->save(self::$cookieName);
-			}
-			//Validates that no field is empty
-			else {
-				if($this->validate->RequiredFieldValidator($_POST[self::$name]) == false){
-					$message = "Username is missing";
-				}else if($this->validate->RequiredFieldValidator($_POST[self::$password]) == false){
-					$message = "Password is missing";
-				}
-				//Incorrect username or password
-				else{
-					$message = "Wrong name or password";
-				}
-			}
-		}
-
-		if($this->loginModel->userIsLoggedIn == false){
-			$response = $this->generateLoginFormHTML($message);
-
-		}else{
-			$response = $this->generateLogoutButtonHTML($message);
-		}
-
-		//
-		return $response;
+		return  $this->generateLoginFormHTML($message);
 	}
 
 	/**
