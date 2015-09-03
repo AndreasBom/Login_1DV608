@@ -29,7 +29,7 @@ class LoginController
             $loggedIn = $this->loginModel->correctLoginCredidentials($this->loginView->getUsername(), $this->loginView->getPassword());
             $this->loginView->showLoginMessage($loggedIn);
             $this->generateView();
-            return true;
+            return ($loggedIn);
         }
 
         $this->generateView();

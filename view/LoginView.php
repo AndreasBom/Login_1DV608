@@ -53,14 +53,14 @@ class LoginView {
 	public function showLoginMessage($loggedIn)
 	{
 		if($loggedIn){
-			$this->loginMessage = "<p>Welcome</p>";
+			$this->loginMessage = "Welcome";
 		}else{
 			if($this->getUsername() == ""){
-				$this->loginMessage = "<p>Username is missing</p>";
+				$this->loginMessage = "Username is missing";
 			}else if($this->getPassword() == ""){
-				$this->loginMessage = "<p>Password is missing</p>";
+				$this->loginMessage = "Password is missing";
 			}else{
-				$this->loginMessage = "<p>Wrong username or password</p>";
+				$this->loginMessage = "Wrong name or password";
 			}
 		}
 	}
@@ -71,7 +71,7 @@ class LoginView {
 	 *
 	 * Should be called after a login attempt has been determined
 	 *
-	 * @return  void BUT writes to standard output and cookies!
+	 * @return void BUT writes to standard output and cookies!
 	 */
 	public function response() {
 		$message = $this->loginMessage;
