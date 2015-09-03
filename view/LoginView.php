@@ -19,41 +19,16 @@ class LoginView {
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
 
+	private $loginModel;
 	private $validate;
 	private $cookie;
 
-
-
-	public function __construct()
+	public function __construct(LoginModel $loginModel)
 	{
+		$this->loginModel = $loginModel;
 		$this->validate = new Validation();
 		$this->cookie = new CookieStorage();
 	}
-
-	public function didUserTryToLogin()
-	{
-		if(isset($_POST[self::$login])){
-			return true;
-		}
-		return false;
-	}
-
-	public function getUserName(){
-		if(isset($_POST['self::$name'])){
-			return $_POST['self::$name'];
-		}
-
-		return "";
-	}
-
-	public function getPassword(){
-		if(isset($_POST['self::$password'])){
-			return $_POST['self::$password'];
-		}
-
-		return "";
-	}
-
 
 
 	/**
@@ -66,9 +41,38 @@ class LoginView {
 	public function response() {
 		$message = '';
 
-		$response = $this->generateLoginFormHTML($message);
-		//$response .= $this->generateLogoutButtonHTML($message);
 
+
+		//Checks if user has pressed the loginButton and a POST is preformed
+		if(isset($_POST[self::$login])) {
+
+			//Correct username and password
+			if ($this->loginModel->correctLoginCredidentials($_POST[self::$name], $_POST[self::$password])) {
+				$message = "<p>Welcome</p>";
+				$this->cookie->save(self::$cookieName);
+			}
+			//Validates that no field is empty
+			else {
+				if($this->validate->RequiredFieldValidator($_POST[self::$name]) == false){
+					$message = "<p>Username is missing</p>";
+				}else if($this->validate->RequiredFieldValidator($_POST[self::$password]) == false){
+					$message = "<p>Password is missing</p>";
+				}
+				//Incorrect username or password
+				else{
+					$message = "<p>Wrong name or password</p>";
+				}
+			}
+		}
+
+		if($this->loginModel->userIsLoggedIn == false){
+			$response = $this->generateLoginFormHTML($message);
+
+		}else{
+			$response = $this->generateLogoutButtonHTML($message);
+		}
+
+		//
 		return $response;
 	}
 
