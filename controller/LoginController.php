@@ -26,7 +26,7 @@ class LoginController
     {
 
         if($this->loginView->didUserTryToLogin()) {
-            header("Location: " . $_SERVER["PHP_SELF"]);
+            
             $this->loginModel->correctLoginCredidentials($this->loginView->getUsername(), $this->loginView->getPassword());
             $message= $this->loginModel->generateResponseMessage();
 
