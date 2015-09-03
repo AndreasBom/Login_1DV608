@@ -31,7 +31,7 @@ class LoginView {
 	}
 
 	public function didUserTryToLogin(){
-		
+
 		return isset($_POST[self::$login]);
 	}
 
@@ -45,6 +45,7 @@ class LoginView {
 		if($this->didUserTryToLogin()){
 			return $_POST[self::$password];
 		}
+
 	}
 
 	/**
@@ -56,6 +57,10 @@ class LoginView {
 	 */
 	public function response() {
 		$message = '';
+		if(isset($_COOKIE["message"])){
+			$message = $_COOKIE["message"];
+		}
+
 
 
 		//return $this->generateLogoutButtonHTML($message);

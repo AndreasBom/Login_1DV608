@@ -11,19 +11,19 @@ namespace view;
 
 class CookieStorage
 {
-    public function save($string){
-        setcookie($string, $string, -1);
+    public function save($name, $string){
+        setcookie($name, $string, -1);
     }
 
-    public function load($string){
-        if(isset($_COOKIE[$string])){
-            $ret = $_COOKIE[$string];
+    public function load($name){
+        if(isset($_COOKIE[$name])){
+            $ret = $_COOKIE[$name];
 
         }else{
             $ret = "not set";
         }
 
-        setcookie($string, "", time() - 1);
+        setcookie($name, "", time() - 1);
 
         return $ret;
     }
