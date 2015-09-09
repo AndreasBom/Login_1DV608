@@ -15,27 +15,48 @@ use view\CookieStorage;
 class LoginModel
 {
     //dummy data
-    private static $userName = "Admin";
-    private static $password = "Password";
+    private static $dummyUserName = "Admin";
+    private static $dummyPassword = "Password";
+//////////////////////////////////////////////////////////////////////////
 
-    private $userIsLoggedIn = false;
+    private static $sessionLocationLoggedIn = 'LoginModel::isUserLoggedIn';
 
 
 
-
-    public function correctLoginCredidentials($userName, $password)
+    /**
+     * @param $userName: input from user
+     * @param $password: input from user
+     * @return bool: Is Credidentionals correct
+     */
+    public function evaluateUserCredidentionals($username, $password)
     {
-        if(self::$userName == trim($userName) && self::$password == trim($password)){
-            $this->userIsLoggedIn = true;
+
+        if($username == self::$dummyUserName && $password == self::$dummyPassword)
+        {
+            $_SESSION[self::$sessionLocationLoggedIn] = true;
             return true;
+
+        }
+        $_SESSION[self::$sessionLocationLoggedIn] = false;
+        return false;
+    }
+
+    /**
+     * @return bool: is user logged in
+     */
+    public function isUserLoggedIn()
+    {
+        if(isset($_SESSION[self::$sessionLocationLoggedIn]))
+        {
+            return $_SESSION[self::$sessionLocationLoggedIn];
         }
 
         return false;
     }
 
-    public function isUserLoggedIn()
+    public function logoutUser()
     {
-        return $this->userIsLoggedIn;
+        $_SESSION[self::$sessionLocationLoggedIn] = false;
     }
 
 

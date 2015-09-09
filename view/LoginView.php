@@ -9,6 +9,7 @@ require_once("./model/LoginModel.php");
 require_once("./model/Validation.php");
 require_once("CookieStorage.php");
 
+
 class LoginView {
 	private static $login = 'LoginView::Login';
 	private static $logout = 'LoginView::Logout';
@@ -18,32 +19,43 @@ class LoginView {
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
+	private static $cookieMessage = 'Login::ViewCookieMessage';
 
 	private $loginModel;
 	private $validate;
-	private $cookie;
+	private $cookieStorage;
+
 	private $loginMessage = "";
 
 	public function __construct(LoginModel $loginModel)
 	{
 		$this->loginModel = $loginModel;
 		$this->validate = new Validation();
-		$this->cookie = new CookieStorage();
+		$this->cookieStorage = new CookieStorage();
 	}
 
-	public function didUserTryToLogin(){
+	public function didUserTryToLogin()
+	{
 		return isset($_POST[self::$login]);
 	}
 
-	public function getUsername(){
+	public function didUserTryToLogout()
+	{
+		return isset($_POST[self::$logout]);
+	}
+
+	public function getUsername()
+	{
 		if($this->didUserTryToLogin()){
 			return $_POST[self::$name];
 		}
 		return "";
 	}
 
-	public function getPassword(){
-		if($this->didUserTryToLogin()){
+	public function getPassword()
+	{
+		if($this->didUserTryToLogin())
+		{
 			return $_POST[self::$password];
 		}
 		return "";
@@ -54,16 +66,30 @@ class LoginView {
 	{
 		if($loggedIn){
 			$this->loginMessage = "Welcome";
-		}else{
-			if($this->getUsername() == ""){
+		}
+		else if($this->didUserTryToLogout())
+		{
+			$this->loginMessage = "Bye bye!";
+		}
+		else
+		{
+			if($this->getUsername() == "")
+			{
 				$this->loginMessage = "Username is missing";
-			}else if($this->getPassword() == ""){
+			}
+			else if($this->getPassword() == "")
+			{
 				$this->loginMessage = "Password is missing";
-			}else{
+			}
+			else
+			{
 				$this->loginMessage = "Wrong name or password";
 			}
+
 		}
+		$this->cookieStorage->save(self::$cookieMessage, $this->loginMessage);
 	}
+
 
 
 	/**
@@ -71,12 +97,21 @@ class LoginView {
 	 *
 	 * Should be called after a login attempt has been determined
 	 *
-	 * @return void BUT writes to standard output and cookies!
+	 * @return String  BUT writes to standard output and cookies!
 	 */
-	public function response() {
-		$message = $this->loginMessage;
+	public function response()
+	{
+		$message = '';
 
-		if($this->loginModel->isUserLoggedIn()){
+		if($this->didUserTryToLogin() || $this->didUserTryToLogout() )
+		{
+			$this->cookieStorage->save(self::$cookieName, $_POST[self::$name]);
+			header('Location: ' . $_SERVER["PHP_SELF"]);
+		}
+		$message = $this->cookieStorage->load(self::$cookieMessage);
+
+		if($this->loginModel->isUserLoggedIn())
+		{
 			return $this->generateLogoutButtonHTML($message);
 		}
 		return  $this->generateLoginFormHTML($message);
@@ -85,9 +120,10 @@ class LoginView {
 	/**
 	* Generate HTML code on the output buffer for the logout button
 	* @param $message, String output message
-	* @return  void, BUT writes to standard output!
+	* @return  String, BUT writes to standard output!
 	*/
-	private function generateLogoutButtonHTML($message) {
+	private function generateLogoutButtonHTML($message)
+	{
 		return '
 			<form  method="post" >
 				<p id="' . self::$messageId . '">' . $message .'</p>
@@ -99,9 +135,10 @@ class LoginView {
 	/**
 	* Generate HTML code on the output buffer for the logout button
 	* @param $message, String output message
-	* @return  void, BUT writes to standard output!
+	* @return  String, BUT writes to standard output!
 	*/
-	private function generateLoginFormHTML($message) {
+	private function generateLoginFormHTML($message)
+	{
 		return '
 			<form method="post" > 
 				<fieldset>
@@ -125,8 +162,10 @@ class LoginView {
 	}
 
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
-	private function getRequestUserName() {
-		if(isset($_POST[self::$name])){
+	private function getRequestUserName()
+	{
+		if(isset($_POST[self::$name]))
+		{
 			return ($_POST[self::$name]);
 		}
 		return "";

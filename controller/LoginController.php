@@ -9,7 +9,6 @@
 namespace control;
 
 use model\LoginModel;
-use view\CookieStorage;
 use view\LoginView;
 
 class LoginController
@@ -17,26 +16,34 @@ class LoginController
     private $loginModel;
     private $loginView;
 
-    public function __construct(LoginModel $model, LoginView $loginView)
+    public function __construct(LoginModel $model)
     {
         $this->loginModel = $model;
-        $this->loginView = $loginView;
+        $this->loginView = new LoginView($model);
     }
 
+    /**
+     * Checks if user name and password is correct
+     * Updates loginMessage
+     *
+     *
+     * @return bool is User logged in?
+     */
     public function doLogin()
     {
-        if($this->loginView->didUserTryToLogin()) {
-            $loggedIn = $this->loginModel->correctLoginCredidentials($this->loginView->getUsername(), $this->loginView->getPassword());
-            $this->loginView->showLoginMessage($loggedIn);
-            $this->generateView();
-            return ($loggedIn);
+        if($this->loginView->didUserTryToLogin())
+        {
+            $this->loginModel->evaluateUserCredidentionals($this->loginView->getUsername(), $this->loginView->getPassword());
+            $this->loginView->showLoginMessage($this->loginModel->isUserLoggedIn());
         }
 
-        $this->generateView();
-        return false;
-    }
+        if($this->loginView->didUserTryToLogout())
+        {
+            $this->loginModel->logoutUser();
+            $this->loginView->showLoginMessage(false);
+        }
 
-    private function generateView(){
-        $this->loginView->response();
+
+        return $this->loginModel->isUserLoggedIn();
     }
 }
