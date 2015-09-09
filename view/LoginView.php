@@ -164,12 +164,13 @@ class LoginView {
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
 	private function getRequestUserName()
 	{
-		if(isset($_POST[self::$name]))
+		/*if(isset($_POST[self::$name]))
 		{
 			return ($_POST[self::$name]);
 		}
-		return "";
+		return "";*/
 
+		return $this->cookieStorage->load(self::$cookieName);
 	}
 	
 }
