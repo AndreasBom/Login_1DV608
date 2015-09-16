@@ -17,7 +17,7 @@ class LoginView {
 	 *
 	 * Should be called after a login attempt has been determined
 	 *
-	 * @return  void BUT writes to standard output and cookies!
+	 * @return  string BUT writes to standard output and cookies!
 	 */
 	public function response() {
 		$message = '';
@@ -30,7 +30,7 @@ class LoginView {
 	/**
 	* Generate HTML code on the output buffer for the logout button
 	* @param $message, String output message
-	* @return  void, BUT writes to standard output!
+	* @return  string, BUT writes to standard output!
 	*/
 	private function generateLogoutButtonHTML($message) {
 		return '
@@ -44,7 +44,7 @@ class LoginView {
 	/**
 	* Generate HTML code on the output buffer for the logout button
 	* @param $message, String output message
-	* @return  void, BUT writes to standard output!
+	* @return  string, BUT writes to standard output!
 	*/
 	private function generateLoginFormHTML($message) {
 		return '
