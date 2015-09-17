@@ -194,9 +194,33 @@ class LoginView {
 
 		$message = '';
 
+<<<<<<< HEAD
 		if($this->preventDoublePosts() == false)
 		{
 			$message = $this->cookieStorage->loadAndRemove(self::$messageId);
+=======
+
+		//Checks if user has pressed the loginButton and a POST is preformed
+		if(isset($_POST[self::$login])) {
+
+			//Correct username and password
+			if ($this->loginModel->correctLoginCredidentials($_POST[self::$name], $_POST[self::$password])) {
+				$message = "<p>Welcome</p>";
+				$this->cookie->save(self::$cookieName);
+			}
+			//Validates that no field is empty
+			else {
+				if($this->validate->RequiredFieldValidator($_POST[self::$name]) == false){
+					$message = "<p>Username is missing</p>";
+				}else if($this->validate->RequiredFieldValidator($_POST[self::$password]) == false){
+					$message = "<p>Password is missing</p>";
+				}
+				//Incorrect username or password
+				else{
+					$message = "<p>Wrong name or password</p>";
+				}
+			}
+>>>>>>> Branch2
 		}
 
 		//Show login or logout form
