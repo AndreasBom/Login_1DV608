@@ -107,8 +107,14 @@ class LoginView {
 	 */
 	public function response() {
 
-		$this->preventDoublePosts();
-		$message = $this->cookieStorage->loadAndRemove(self::$messageId);
+		$message = '';
+
+		if($this->preventDoublePosts() == false)
+		{
+			$message = $this->cookieStorage->loadAndRemove(self::$messageId);
+		}
+
+
 
 
 		if($this->loginModel->isUserLoggedIn() == false)
@@ -170,7 +176,10 @@ class LoginView {
 		if($_POST)
 		{
 			header("Location: " . $_SERVER["PHP_SELF"]);
+			return true;
 		}
+
+		return false;
 	}
 	
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
