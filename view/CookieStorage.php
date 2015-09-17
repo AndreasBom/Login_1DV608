@@ -30,4 +30,14 @@ class CookieStorage
         setcookie($name, "", time() -1);
         return $ret;
     }
+
+    public function load($name)
+    {
+        if(isset($_COOKIE[$name]))
+        {
+            return $_COOKIE[$name];
+        }
+
+        return null;
+    }
 }

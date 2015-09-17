@@ -64,6 +64,17 @@ class LoginView {
 	}
 
 
+	public function autoLogin()
+	{
+		if($this->cookieStorage->load(self::$cookieName) && $this->cookieStorage->load(self::$cookiePassword))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+
 	/**
 	 * @param $loggedIn
 	 */
