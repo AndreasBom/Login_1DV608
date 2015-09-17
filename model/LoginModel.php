@@ -2,44 +2,24 @@
 /**
  * Created by PhpStorm.
  * User: Andreas
- * Date: 2015-09-16
- * Time: 21:26
+ * Date: 2015-08-31
+ * Time: 13:17
  */
 
 namespace model;
 
-require_once("LoginDAL.php");
+
 
 class LoginModel
 {
-    private static $userLoggedInSession = "LoginModel::LoggedIn";
-    private static $usernameInSession = "LoginModel::Username";
-    private static $users = array();
+    //dummy data
+    private static $userName = "Admin";
+    private static $password = "Password";
 
-    public function __construct()
-    {
-        $dal = new LoginDAL();
-        self::$users = $dal->getUsers();
-    }
+    public $userIsLoggedIn = false;
 
-    /**
-     * Evaluate if submitted credentional match saved credentional
-     *
-     * @param string $name
-     * @param string $password
-     * @return bool
-     */
-    public function evaluateUserCredentials($name, $password)
-    {
-        foreach(self::$users as $user)
-        {
-            if($user->getUsername() === $name && $user->getPassword() === $password)
-            {
-                $_SESSION[self::$userLoggedInSession] = true;
-                return true;
-            }
-        }
 
+<<<<<<< HEAD
         return false;
     }
 
@@ -51,21 +31,18 @@ class LoginModel
 
 
     public function setUsernameInSession($name)
+=======
+    public function correctLoginCredidentials($userName, $password)
+>>>>>>> master
     {
-        $_SESSION[self::$usernameInSession] = $name;
-    }
-
-    public function getUsernameInSession()
-    {
-        if(isset($_SESSION[self::$usernameInSession]))
-        {
-            return $_SESSION[self::$usernameInSession];
+        if(self::$userName == trim($userName) && self::$password == trim($password)){
+            return true;
         }
 
-        return null;
-
+        return false;
     }
 
+<<<<<<< HEAD
 
     public function isUserLoggedIn()
     {
@@ -78,4 +55,7 @@ class LoginModel
     {
         session_unset();
     }
+=======
+
+>>>>>>> master
 }
