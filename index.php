@@ -8,6 +8,7 @@ require_once('model/LoginModel.php');
 require_once('controller/LoginController.php');
 require_once('helpers/config.php');
 require_once('view/CookieStorage.php');
+require_once('model/AutoLogin.php');
 
 use \controller\LoginController;
 

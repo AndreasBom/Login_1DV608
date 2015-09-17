@@ -25,12 +25,14 @@ class config
         $user2 = new User("JanneBannan", "abcde");
         $user3 = new User("Admin", "Password");
         $user4 = new User("BlaBla", "PaSsWoRd");
+        $user5 = new User("a","b");
 
         $dal = new LoginDAL();
         $dal->addUser($user1);
         $dal->addUser($user2);
         $dal->addUser($user3);
         $dal->addUser($user4);
+        $dal->addUser($user5);
 
         $users = $dal->getUsers();
         $this->save($users);
