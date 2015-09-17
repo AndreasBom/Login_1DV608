@@ -44,7 +44,7 @@ class LoginView {
 	{
 		if(isset($_POST[self::$name]))
 		{
-			return $_POST[self::$name];
+			return trim($_POST[self::$name]);
 		}
 
 		return "";
@@ -114,9 +114,7 @@ class LoginView {
 			$message = $this->cookieStorage->loadAndRemove(self::$messageId);
 		}
 
-
-
-
+		//Show login or logout form
 		if($this->loginModel->isUserLoggedIn() == false)
 		{
 			$response = $this->generateLoginFormHTML($message);
@@ -176,7 +174,7 @@ class LoginView {
 		if($_POST)
 		{
 			header("Location: " . $_SERVER["PHP_SELF"]);
-			return true;
+			true;
 		}
 
 		return false;

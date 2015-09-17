@@ -31,14 +31,16 @@ class LoginController
         {
             $this->loginmodel->evaluateUserCredentials($submitedUsername, $submitedPassword);
             $this->loginmodel->setUsernameInSession($submitedUsername);
+            $this->loginview->showMessage($this->loginmodel->isUserLoggedIn());
         }
 
         if($this->loginview->didUserLogout())
         {
             $this->loginmodel->logoutUser();
+            $this->loginview->showMessage($this->loginmodel->isUserLoggedIn());
         }
 
-        $this->loginview->showMessage($this->loginmodel->isUserLoggedIn());
+
         return $this->loginmodel->isUserLoggedIn();
     }
 }
