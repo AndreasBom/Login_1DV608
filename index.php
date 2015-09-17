@@ -4,6 +4,7 @@
 require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
+<<<<<<< HEAD
 require_once('model/LoginModel.php');
 require_once('controller/LoginController.php');
 require_once('helpers/config.php');
@@ -12,12 +13,19 @@ require_once('view/CookieStorage.php');
 use \controller\LoginController;
 
 new \helpers\config();
+=======
+require_once('controller/LoginController.php');
+
+use view\LoginView;
+use view\DateTimeView;
+>>>>>>> origin/master
 
 //MAKE SURE ERRORS ARE SHOWN... MIGHT WANT TO TURN THIS OFF ON A PUBLIC SERVER
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 session_start();
+<<<<<<< HEAD
 session_regenerate_id();
 
 //CREATE OBJECTS OF THE VIEWS
@@ -30,4 +38,17 @@ $loginC = new LoginController($loginM);
 $loggedInSuccessfully = $loginC->doLogin();
 
 $lv->render($loggedInSuccessfully, $v, $dtv);
+=======
 
+//CREATE OBJECTS OF THE VIEWS
+$loginM = new \model\LoginModel();
+$loginV = new LoginView($loginM);
+$dateTimeV = new DateTimeView();
+
+$loginC = new \control\LoginController($loginM);
+$lv = new LayoutView();
+
+$loggedIn = $loginC->doLogin();
+>>>>>>> origin/master
+
+$lv->render($loggedIn, $loginV, $dateTimeV);

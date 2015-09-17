@@ -1,9 +1,11 @@
 <?php
-
+use \view\LoginView;
+use \view\DateTimeView;
 
 class LayoutView {
-  
+
   public function render($isLoggedIn, LoginView $v, DateTimeView $dtv) {
+
     echo '<!DOCTYPE html>
       <html>
         <head>

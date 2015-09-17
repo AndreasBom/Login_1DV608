@@ -2,12 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: Andreas
+<<<<<<< HEAD
  * Date: 2015-09-16
  * Time: 21:26
+=======
+ * Date: 2015-08-31
+ * Time: 13:17
+>>>>>>> origin/master
  */
 
 namespace model;
 
+<<<<<<< HEAD
 require_once("LoginDAL.php");
 
 class LoginModel
@@ -62,10 +68,64 @@ class LoginModel
     public function isUserLoggedIn()
     {
         return isset($_SESSION[self::$userLoggedInSession]);
+=======
+
+
+use view\CookieStorage;
+
+class LoginModel
+{
+    //dummy data
+    private static $dummyUserName = "Admin";
+    private static $dummyPassword = "Password";
+//////////////////////////////////////////////////////////////////////////
+
+    private static $sessionLocationLoggedIn = 'LoginModel::isUserLoggedIn';
+
+
+
+    /**
+     * @param $userName: input from user
+     * @param $password: input from user
+     * @return bool: Is Credidentionals correct
+     */
+    public function evaluateUserCredidentionals($username, $password)
+    {
+
+        if($username == self::$dummyUserName && $password == self::$dummyPassword)
+        {
+            $_SESSION[self::$sessionLocationLoggedIn] = true;
+            return true;
+
+        }
+        $_SESSION[self::$sessionLocationLoggedIn] = false;
+        return false;
+    }
+
+    /**
+     * @return bool: is user logged in
+     */
+    public function isUserLoggedIn()
+    {
+        if(isset($_SESSION[self::$sessionLocationLoggedIn]))
+        {
+            return $_SESSION[self::$sessionLocationLoggedIn];
+        }
+
+        return false;
+>>>>>>> origin/master
     }
 
     public function logoutUser()
     {
+<<<<<<< HEAD
         session_unset();
     }
+=======
+        $_SESSION[self::$sessionLocationLoggedIn] = false;
+    }
+
+
+
+>>>>>>> origin/master
 }
