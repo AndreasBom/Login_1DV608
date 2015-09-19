@@ -10,38 +10,68 @@
 namespace controller;
 
 
+use model\AutoLogin;
 use model\LoginModel;
 
 class LoginController
 {
-    private $loginmodel;
-    private $loginview;
+    private $loginModel;
+    private $loginView;
+    private $autoLogin;
 
     public function __construct(LoginModel $model)
     {
-        $this->loginmodel = $model;
-        $this->loginview = new \LoginView($model);
+        $this->loginModel = $model;
+        $this->loginView = new \LoginView($model);
+        $this->autoLogin = new AutoLogin($model);
     }
+
 
     public function doLogin()
     {
-        $submitedUsername = $this->loginview->getUsername();
-        $submitedPassword = $this->loginview->getPassword();
+        $submitedUsername = $this->loginView->getUsername();
+        $submitedPassword = $this->loginView->getPassword();
 
-        if($this->loginview->didUserTryToLoggin())
+        if($this->loginView->loginWithSavesCredentials())
         {
-            $this->loginmodel->evaluateUserCredentials($submitedUsername, $submitedPassword);
-            $this->loginmodel->setUsernameInSession($submitedUsername);
-            $this->loginview->showMessage($this->loginmodel->isUserLoggedIn());
+            $usernameInCookie = $this->loginView->getSavedUsername();
+            $passwordString = $this->loginView->getSavedPasswordString();
+
+            //
+            $this->autoLogin->evaluateSavedCredentials($usernameInCookie, $passwordString);
+
+
         }
 
-        if($this->loginview->didUserLogout())
+        if($this->loginView->didUserTryToLoggin())
         {
-            $this->loginmodel->logoutUser();
-            $this->loginview->showMessage($this->loginmodel->isUserLoggedIn());
+            $this->loginModel->evaluateUserCredentials($submitedUsername, $submitedPassword);
+            $this->loginModel->setUsernameInSession($submitedUsername);
+            $this->loginView->showMessage($this->loginModel->isUserLoggedIn());
+
+            if($this->loginModel->isUserLoggedIn() && $this->loginView->rememberMe())
+            {
+                //generate and saves random passwordstring at server
+                $passwordString = $this->autoLogin->generatePasswordString($submitedUsername);
+                //Saves username and passwordstring to cookie
+                $this->loginView->saveCredentials($submitedUsername, $passwordString);
+            }
+
+        }
+
+        if($this->loginView->didUserLogout())
+        {
+            $this->loginModel->logoutUser();
+            $this->loginView->deleteCredentials();
+            $this->loginView->showMessage($this->loginModel->isUserLoggedIn());
         }
 
 
+
+
+<<<<<<< HEAD
+        return $this->loginModel->isUserLoggedIn();
+=======
         return $this->loginmodel->isUserLoggedIn();
 =======
  * Date: 2015-08-31
@@ -88,5 +118,10 @@ class LoginController
 
         return $this->loginModel->isUserLoggedIn();
 >>>>>>> origin/master
+<<<<<<< HEAD
+>>>>>>> 06f2d2fa6b9544548e570506b1f9ab8342f191ed
+=======
+>>>>>>> master
+>>>>>>> f533cd31c7e4af0e004b0feead6e4ec63e3cc3e4
     }
 }

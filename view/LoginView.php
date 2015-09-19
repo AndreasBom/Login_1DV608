@@ -145,6 +145,68 @@ class LoginView {
 		return "";
 	}
 
+	/**
+	 * @return string
+	 * @throws Exception if value of cookie returns null
+	 */
+	public function getSavedUsername()
+	{
+		if($this->cookieStorage->load(self::$cookieName) == null)
+		{
+			throw new \Exception("No cookie with that name");
+		}
+
+		return $this->cookieStorage->load(self::$cookieName);
+	}
+
+	/**
+	 * @return string
+	 * @throws Exception if value of cookie returns null
+	 */
+	public function getSavedPasswordString()
+	{
+		if($this->cookieStorage->load(self::$cookiePassword) == null)
+		{
+			throw new \Exception("No cookie with that name");
+		}
+
+		return $this->cookieStorage->load(self::$cookiePassword);
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function rememberMe()
+	{
+		return isset($_POST[self::$keep]);
+	}
+
+
+	public function loginWithSavesCredentials()
+	{
+		if($this->cookieStorage->load(self::$cookieName) && $this->cookieStorage->load(self::$cookiePassword))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	public function saveCredentials($username, $passwordString)
+	{
+		//save username
+		$this->cookieStorage->save(self::$cookieName, $username);
+		//save password string
+		$this->cookieStorage->save(self::$cookiePassword, $passwordString);
+	}
+
+	public function deleteCredentials()
+	{
+		$this->cookieStorage->loadAndRemove(self::$cookieName);
+		$this->cookieStorage->loadAndRemove(self::$cookiePassword);
+	}
+
 
 	/**
 	 * @param $loggedIn
