@@ -9,7 +9,7 @@
 namespace model;
 
 
-class autoLogin extends LoginModel
+class AutoLogin extends LoginModel
 {
 
     /**

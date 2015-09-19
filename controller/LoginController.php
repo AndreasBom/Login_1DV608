@@ -9,7 +9,7 @@
 namespace controller;
 
 
-use model\autoLogin;
+use model\AutoLogin;
 use model\LoginModel;
 
 class LoginController
@@ -22,7 +22,7 @@ class LoginController
     {
         $this->loginModel = $model;
         $this->loginView = new \LoginView($model);
-        $this->autoLogin = new autoLogin($model);
+        $this->autoLogin = new AutoLogin($model);
     }
 
 
