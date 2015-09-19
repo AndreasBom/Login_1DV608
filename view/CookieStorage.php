@@ -67,5 +67,9 @@ class CookieStorage
     }
 
 >>>>>>> origin/master
+<<<<<<< HEAD
 >>>>>>> 06f2d2fa6b9544548e570506b1f9ab8342f191ed
+=======
+>>>>>>> master
+>>>>>>> f533cd31c7e4af0e004b0feead6e4ec63e3cc3e4
 }
