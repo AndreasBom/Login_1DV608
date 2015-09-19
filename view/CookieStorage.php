@@ -2,8 +2,13 @@
 /**
  * Created by PhpStorm.
  * User: Andreas
+<<<<<<< HEAD
  * Date: 2015-09-16
  * Time: 23:25
+=======
+ * Date: 2015-09-02
+ * Time: 13:37
+>>>>>>> origin/master
  */
 
 namespace view;
@@ -11,12 +16,21 @@ namespace view;
 
 class CookieStorage
 {
+<<<<<<< HEAD
     public function save($name, $value)
     {
         setcookie($name, $value, -1);
     }
 
     public function loadAndRemove($name)
+=======
+    public function save($name, $string)
+    {
+        setcookie($name, $string, -1);
+    }
+
+    public function load($name)
+>>>>>>> origin/master
     {
         $ret = '';
         if(isset($_COOKIE[$name]))
@@ -25,11 +39,13 @@ class CookieStorage
         }
         else
         {
+<<<<<<< HEAD
             return "";
         }
         setcookie($name, "", time() -1);
         return $ret;
     }
+<<<<<<< HEAD
 
     public function load($name)
     {
@@ -40,4 +56,20 @@ class CookieStorage
 
         return null;
     }
+=======
+=======
+            return false;
+        }
+
+        setcookie($name, "", time() -1);
+
+        return $ret;
+    }
+
+>>>>>>> origin/master
+<<<<<<< HEAD
+>>>>>>> 06f2d2fa6b9544548e570506b1f9ab8342f191ed
+=======
+>>>>>>> master
+>>>>>>> f533cd31c7e4af0e004b0feead6e4ec63e3cc3e4
 }
