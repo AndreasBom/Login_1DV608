@@ -14,14 +14,16 @@ class LoginView {
 	private $cookieStorage;
 
 
-
+	/**
+	 * @param \model\LoginModel $model
+	 */
 	public function __construct(\model\LoginModel $model)
 	{
 		$this->loginModel = $model;
 		$this->cookieStorage = new \view\CookieStorage();
 	}
 
-	/**
+	/**Returns true if user tries to log in
 	 * @return bool
 	 */
 	public function didUserTryToLoggin()
@@ -29,7 +31,7 @@ class LoginView {
 		return isset($_POST[self::$login]);
 	}
 
-	/**
+	/**Returns true if user tries to log out
 	 * @return bool
 	 */
 	public function didUserLogout()
@@ -37,7 +39,7 @@ class LoginView {
 		return isset($_POST[self::$logout]);
 	}
 
-	/**
+	/**Returns user input
 	 * @return string
 	 */
 	public function getUsername()
@@ -50,7 +52,7 @@ class LoginView {
 		return "";
 	}
 
-	/**
+	/**Returns user input
 	 * @return string
 	 */
 	public function getPassword()
@@ -63,7 +65,7 @@ class LoginView {
 		return "";
 	}
 
-	/**
+	/**Reads from saved cookie
 	 * @return string
 	 * @throws Exception if value of cookie returns null
 	 */
@@ -71,13 +73,13 @@ class LoginView {
 	{
 		if($this->cookieStorage->load(self::$cookieName) == null)
 		{
-			throw new \Exception("No cookie with that name");
+			throw new \exception\InvalidCookieException("No cookie with that name");
 		}
 
 		return $this->cookieStorage->load(self::$cookieName);
 	}
 
-	/**
+	/**Reads from saved cookie
 	 * @return string
 	 * @throws Exception if value of cookie returns null
 	 */
@@ -85,23 +87,24 @@ class LoginView {
 	{
 		if($this->cookieStorage->load(self::$cookiePassword) == null)
 		{
-			throw new \Exception("No cookie with that name");
+			throw new \exception\InvalidCookieException("No cookie with that name");
 		}
 
 		return $this->cookieStorage->load(self::$cookiePassword);
 	}
 
 
-	/**
+	/**Returns true if tick button is ticked
 	 * @return bool
 	 */
 	public function rememberMe()
 	{
-		//$this->cookieStorage->save(self::$keep, true);
 		return isset($_POST[self::$keep]);
 	}
 
-
+	/**Returns true if user logs in with saved cookies
+	 * @return bool|Exception|\exception\InvalidCookieException
+	 */
 	public function loginWithSavedCredentials()
 	{
 		try
@@ -120,27 +123,10 @@ class LoginView {
 
 	}
 
-	public function getUserIp()
-	{
-		if($_SERVER['REMOTE_ADDR'] === null || $_SERVER['REMOTE_ADDR'] === "")
-		{
-			throw new exception\ReturningNullException("Ip address is null or empty");
-		}
-
-		return $_SERVER['REMOTE_ADDR'];
-	}
-
-	public function getUserBrowser()
-	{
-		if($_SERVER['HTTP_USER_AGENT'] === null || $_SERVER['HTTP_USER_AGENT'] === "")
-		{
-			throw new \exception\ReturningNullException("BrowserInformation is null or empty");
-		}
-
-		return $_SERVER['HTTP_USER_AGENT'];
-	}
-
-
+	/**Saves username and password to cookie
+	 * @param $username
+	 * @param $passwordString
+	 */
 	public function saveCredentials($username, $passwordString)
 	{
 		//save username
@@ -149,29 +135,30 @@ class LoginView {
 		$this->cookieStorage->save(self::$cookiePassword, $passwordString);
 	}
 
+	/**
+	 * Deletes cookies with username and password
+	 */
 	public function deleteCredentials()
 	{
 		$this->cookieStorage->loadAndRemove(self::$cookieName);
 		$this->cookieStorage->loadAndRemove(self::$cookiePassword);
-		//$this->cookieStorage->loadAndRemove(self::$keep);
 	}
 
-	public function errorHandling()
-	{
 
-	}
-
-	/**
+	/**Login message to show.
+	 * Saves to cookie
 	 * @param $loggedIn
 	 */
 	public function showMessage($loggedIn)
 	{
+		//User is logged in
 		if($loggedIn)
 		{
 			if($this->rememberMe())
 			{
 				$message = "Welcome and you will be remembered";
 			}
+
 			/*try
 			{
 				$this->loginWithSavedCredentials();
@@ -181,6 +168,7 @@ class LoginView {
 			{
 				$message = "Wrong information in cookies";
 			}*/
+
 			elseif($this->loginWithSavedCredentials())
 			{
 				$message = $this->loginWithSavedCredentials();
@@ -191,10 +179,12 @@ class LoginView {
 			}
 
 		}
+		//User loggs out
 		else if($this->didUserLogout())
 		{
 			$message = "Bye bye!";
 		}
+		//Somthing is wrong with username or password
 		else
 		{
 			if($this->getUsername() == "")
@@ -210,6 +200,7 @@ class LoginView {
 				$message = "Wrong name or password";
 			}
 		}
+
 
 		$this->cookieStorage->save(self::$messageId, $message);
 	}
@@ -289,6 +280,9 @@ class LoginView {
 		';
 	}
 
+	/**
+	 * @return bool
+	 */
 	private function preventDoublePosts()
 	{
 		if($_POST)

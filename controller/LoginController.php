@@ -30,14 +30,14 @@ class LoginController
 
     public function doLogin()
     {
+        //Saves provided username and password to varibles
         $submitedUsername = $this->loginView->getUsername();
         $submitedPassword = $this->loginView->getPassword();
-        $userIp = $this->loginView->getUserIp();
-        $userBrowser = $this->loginView->getUserBrowser();
 
+        //If cookes with username and password exists
         if($this->loginView->loginWithSavedCredentials())
         {
-
+                //Fetches username and passwordstring from cookie
                 $usernameInCookie = $this->loginView->getSavedUsername();
                 $passwordString = $this->loginView->getSavedPasswordString();
 
@@ -49,22 +49,19 @@ class LoginController
                 {
                     throw new \exception\InvalidCookieException();
                 }
-
-
-
-
                 $this->loginView->showMessage($this->loginModel->isUserLoggedIn());
-
-
-
         }
 
+        //If user presses login button
         if($this->loginView->didUserTryToLoggin())
         {
+            //check if username and password is correct
             $this->loginModel->evaluateUserCredentials($submitedUsername, $submitedPassword);
+            //Saves provided username in session. This is used to autocomplete form with username
             $this->loginModel->setUsernameInSession($submitedUsername);
             $this->loginView->showMessage($this->loginModel->isUserLoggedIn());
 
+            //Login and remember me
             if($this->loginModel->isUserLoggedIn() && $this->loginView->rememberMe())
             {
                 //generate and saves random passwordstring at server
@@ -76,6 +73,7 @@ class LoginController
 
         }
 
+        //If user presses logout button
         if($this->loginView->didUserLogout())
         {
             $this->loginModel->logoutUser();
@@ -84,7 +82,7 @@ class LoginController
             $this->loginView->showMessage($this->loginModel->isUserLoggedIn());
         }
 
-
+        //returns bool; is user logged in?
         return $this->loginModel->isUserLoggedIn();
     }
 }

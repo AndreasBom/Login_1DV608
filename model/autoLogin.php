@@ -53,7 +53,7 @@ class AutoLogin extends LoginModel
 
         if($correctUsername)
         {
-            self::setUserLoggedIn($username);
+            self::setUserLoggedIn(true);
         }
 
     }

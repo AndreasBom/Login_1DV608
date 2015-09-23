@@ -16,6 +16,9 @@ class LoginModel
     private static $usernameInSession = "LoginModel::Username";
     private static $users = array();
 
+    /**
+     * fake database with user data
+     */
     public function __construct()
     {
         $dal = new LoginDAL();
@@ -23,7 +26,7 @@ class LoginModel
     }
 
     /**
-     * Evaluate if submitted credentional match saved credentional
+     * Evaluate if submitted credentionals match saved credentionals
      *
      * @param string $name
      * @param string $password
@@ -44,11 +47,18 @@ class LoginModel
     }
 
 
+    /**Set username in Session
+     * @param $name
+     */
     public function setUsernameInSession($name)
     {
         $_SESSION[self::$usernameInSession] = $name;
     }
 
+    /**If session is set, returns bool,
+     * if session is not set, returns null
+     * @return bool|null
+     */
     public function getUsernameInSession()
     {
         if(isset($_SESSION[self::$usernameInSession]))
@@ -57,17 +67,25 @@ class LoginModel
         }
 
         return null;
-
     }
 
 
+    protected function setUserLoggedIn($bool)
+    {
+        $_SESSION[self::$userLoggedInSession] = $bool;
+    }
+
+    /**
+     * @return bool
+     */
     public function isUserLoggedIn()
     {
         return isset($_SESSION[self::$userLoggedInSession]);
     }
 
-
-
+    /**
+     * Unset session
+     */
     public function logoutUser()
     {
         session_unset();

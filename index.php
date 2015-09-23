@@ -10,8 +10,8 @@ require_once('helpers/config.php');
 require_once('view/CookieStorage.php');
 require_once('model/AutoLogin.php');
 require_once('exception/InvalidCookieExceptionException.php');
-require_once('exception/ReturningNullException.php');
-require_once('model/Identifier.php');
+
+
 
 
 use \controller\LoginController;
@@ -22,8 +22,9 @@ new \helpers\config();
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
+//Start a session
 session_start();
-session_regenerate_id();
+//session_regenerate_id();
 
 //CREATE OBJECTS OF THE VIEWS
 $loginM = new \model\LoginModel();
@@ -32,7 +33,7 @@ $dtv = new DateTimeView();
 $lv = new LayoutView();
 
 $loginC = new LoginController($loginM);
-$loggedInSuccessfully = $loginC->doLogin();
+$loggedInSuccessfully = $loginC->doLogin(); //returns bool
 
 
 $lv->render($loggedInSuccessfully, $v, $dtv);
