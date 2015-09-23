@@ -9,6 +9,10 @@ require_once('controller/LoginController.php');
 require_once('helpers/config.php');
 require_once('view/CookieStorage.php');
 require_once('model/AutoLogin.php');
+require_once('exception/InvalidCookieExceptionException.php');
+require_once('exception/ReturningNullException.php');
+require_once('model/Identifier.php');
+
 
 use \controller\LoginController;
 

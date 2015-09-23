@@ -97,19 +97,49 @@ class LoginView {
 	 */
 	public function rememberMe()
 	{
+		//$this->cookieStorage->save(self::$keep, true);
 		return isset($_POST[self::$keep]);
 	}
 
 
-	public function loginWithSavesCredentials()
+	public function loginWithSavedCredentials()
 	{
-		if($this->cookieStorage->load(self::$cookieName) && $this->cookieStorage->load(self::$cookiePassword))
+		try
 		{
-			return true;
+			if($this->cookieStorage->load(self::$cookieName) && $this->cookieStorage->load(self::$cookiePassword))
+			{
+				return true;
+			}
+			return false;
+		}
+		catch (\exception\InvalidCookieException $ex)
+		{
+			return $ex;
 		}
 
-		return false;
+
 	}
+
+	public function getUserIp()
+	{
+		if($_SERVER['REMOTE_ADDR'] === null || $_SERVER['REMOTE_ADDR'] === "")
+		{
+			throw new exception\ReturningNullException("Ip address is null or empty");
+		}
+
+		return $_SERVER['REMOTE_ADDR'];
+	}
+
+	public function getUserBrowser()
+	{
+		if($_SERVER['HTTP_USER_AGENT'] === null || $_SERVER['HTTP_USER_AGENT'] === "")
+		{
+			throw new \exception\ReturningNullException("BrowserInformation is null or empty");
+		}
+
+		return $_SERVER['HTTP_USER_AGENT'];
+	}
+
 
 	public function saveCredentials($username, $passwordString)
 	{
@@ -123,16 +153,43 @@ class LoginView {
 	{
 		$this->cookieStorage->loadAndRemove(self::$cookieName);
 		$this->cookieStorage->loadAndRemove(self::$cookiePassword);
+		//$this->cookieStorage->loadAndRemove(self::$keep);
 	}
 
+	public function errorHandling()
+	{
+
+	}
 
 	/**
 	 * @param $loggedIn
 	 */
 	public function showMessage($loggedIn)
 	{
-		if($loggedIn){
-			$message = "Welcome";
+		if($loggedIn)
+		{
+			if($this->rememberMe())
+			{
+				$message = "Welcome and you will be remembered";
+			}
+			/*try
+			{
+				$this->loginWithSavedCredentials();
+
+			}
+			catch (\exception\InvalidCookieException $ex)
+			{
+				$message = "Wrong information in cookies";
+			}*/
+			elseif($this->loginWithSavedCredentials())
+			{
+				$message = $this->loginWithSavedCredentials();
+			}
+			else
+			{
+				$message = "Welcome";
+			}
+
 		}
 		else if($this->didUserLogout())
 		{
@@ -170,6 +227,7 @@ class LoginView {
 	public function response() {
 
 		$message = '';
+
 
 		if($this->preventDoublePosts() == false)
 		{

@@ -43,12 +43,6 @@ class LoginModel
         return false;
     }
 
-    protected function setUserLoggedIn($username)
-    {
-        $_SESSION[self::$userLoggedInSession] = true;
-        return true;
-    }
-
 
     public function setUsernameInSession($name)
     {
