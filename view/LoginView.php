@@ -1,6 +1,10 @@
 <?php
 
-class LoginView {
+namespace view;
+require_once('IView.php');
+
+class LoginView implements \view\IView{
+
 	private static $login = 'LoginView::Login';
 	private static $logout = 'LoginView::Logout';
 	private static $name = 'LoginView::UserName';
@@ -12,6 +16,7 @@ class LoginView {
 
 	private $loginModel;
 	private $cookieStorage;
+
 
 
 	/**

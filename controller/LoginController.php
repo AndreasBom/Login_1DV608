@@ -13,6 +13,7 @@ use exception\InvalidCookieException;
 use model\AutoLogin;
 use model\Identifier;
 use model\LoginModel;
+use view\LoginView;
 
 class LoginController
 {
@@ -23,7 +24,7 @@ class LoginController
     public function __construct(LoginModel $model)
     {
         $this->loginModel = $model;
-        $this->loginView = new \LoginView($model);
+        $this->loginView = new LoginView($model);
         $this->autoLogin = new AutoLogin($model);
     }
 
