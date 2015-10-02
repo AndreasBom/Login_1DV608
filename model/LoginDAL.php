@@ -16,6 +16,11 @@ class LoginDAL
      */
     private $listOfUsers = array();
 
+    public function __construct()
+    {
+        $mysqli = new \mysqli("localhost", "admin", "1", "loginapp");
+
+    }
 
     /**
      * Add user to array listOfUsers
@@ -44,5 +49,14 @@ class LoginDAL
         }
 
 
+    }
+
+    public function saveUser($user)
+    {
+
+        /*$this->addUser($user);
+        $users = $this->getUsers();
+        $stringData = serialize($users);
+        file_put_contents("users.txt", $stringData);*/
     }
 }

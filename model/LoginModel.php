@@ -14,15 +14,17 @@ class LoginModel
 {
     private static $userLoggedInSession = "LoginModel::LoggedIn";
     private static $usernameInSession = "LoginModel::Username";
-    private static $users = array();
+    //private static $users = array();
 
-    /**
-     * fake database with user data
-     */
+    private $database;
+
     public function __construct()
     {
-        $dal = new LoginDAL();
-        self::$users = $dal->getUsers();
+
+        //$this->database = $db;
+
+        /*$dal = new LoginDAL();
+        self::$users = $dal->getUsers();*/
     }
 
     /**

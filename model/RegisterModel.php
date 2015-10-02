@@ -75,5 +75,10 @@ class RegisterModel
         }
     }
 
+    public function saveUser($username, $password)
+    {
+        $this->dal->saveUser(new User($username, $password));
+    }
+
 
 }

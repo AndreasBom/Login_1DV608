@@ -39,6 +39,7 @@ class RegisterController
 
             $this->validateInput($userName, $password, $repeatPassword);
 
+            $this->model->saveUser($userName, $password);
 
         }
 
